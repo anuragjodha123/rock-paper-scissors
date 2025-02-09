@@ -13,3 +13,7 @@ function getComputerChoice() {
             break;
     }
 }
+
+function getHumanChoice() {
+    return parseInt(prompt("Write your choice in the prompt below. \n 1. Rock \n 2. Paper \n 3. Scissors"));
+}
