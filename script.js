@@ -3,14 +3,11 @@ function getComputerChoice() {
 
     switch(a) {
         case 1:
-            console.log('rock');
-            break;
+            return 'rock';
         case 2:
-            console.log('paper');
-            break;
+            return 'paper';
         case 3:
-            console.log('scissors')
-            break;
+            return 'scissors';
     }
 }
 
@@ -58,5 +55,23 @@ function playRound(humanChoice, computerChoice) {
             console.log('You lose! Rock beats Scissors.');
             computerScore++;
         }
+    }
+}
+
+
+function playGame() {  
+    for (let i = 0; i < 5; i++) {
+        const humanSelection = getHumanChoice();
+        const computerSelection = getComputerChoice();
+
+        playRound(humanSelection, computerSelection);
+    }
+
+    if (humanScore > computerScore) {
+        console.log('Hooman Wins!!')
+    } else if (computerScore > humanScore) {
+        console.log('Compooter Wins!')
+    } else {
+        console.log('Draw!!')
     }
 }
