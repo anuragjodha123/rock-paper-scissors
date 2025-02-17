@@ -1,0 +1,48 @@
+html {
+  font-family: "Fira Code Retina";
+  background-color: #F5F5F5;
+}
+
+.top-div {
+  display: flex;
+  font-weight: 200;
+  justify-content: space-around;
+}
+
+.left, .right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-board {
+  display: flex;
+  gap: 28px;
+}
+
+.score-board > div {
+  width: 55px;
+  height: 55px;
+  background-color: #F6F6F6;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Middle div styles */
+
+.rps-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.rps-options > img {
+  filter: brightness(0.95);
+  width: 110px;
+  height: 110px;
+}
+
+.rps-options > img:hover {
+  width: 120px;
+  height: 120px;
+  filter: brightness(1);
+}

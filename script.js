@@ -109,7 +109,6 @@ function loopArr() {
 
   for (let i = 0; i < newArr.length; i++) {
     let timeoutInterval = Math.pow(5000, i/newArr.length);
-
     setTimeout(() => changeSlotScreen(newArr[i]), timeoutInterval);
   }
 }
