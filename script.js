@@ -1,25 +1,54 @@
-
+/*
+[X] Add green color to the background if human wins (simple timeout would do)
+[X] Add score to the ui
+[X] Stop the game if 5 rounds completed
+[X] Announce Win (create element with replay button)
+[] Add confetti if human wins 😁
+[] Add the bottom dialog
+ */
+ 
 let humanScore = 0;
 let computerScore = 0;
-
-var re = new RegExp('(?<=images\/)(.*?)(?=\.png)');
-
+let gameRounds = 0;
 let humanSelected;
 let computerSelected;
 
+let winColor = "#64ff7e";
+let loseColor = "#ff7676";
+let drawColor = "#c6c6c6"; 
+let normalColor = "#f6f6f6";
+let re = new RegExp('(?<=images\/)(.*?)(?=\.png)');
+
+let humanChoiceBox = document.querySelector('.left .rps-choice');
+let computerChoiceBox = document.querySelector('.right .rps-choice');
+let humanScoreBoard = document.querySelectorAll('.left .score-board div');
+let computerScoreBoard = document.querySelectorAll('.right .score-board div');
+let finishedPopup = document.querySelector('.game-finished');
+let replayButton = document.querySelector('.game-finished button');
+
 function playGame() {  
+    gameRounds++;
+
     if (
       humanSelected === 'rock' && computerSelected === 'scissors' ||
       humanSelected === 'paper' && computerSelected === 'rock' ||
       humanSelected === 'scissors' && computerSelected === 'paper') 
     {
       humanScore++;
+      changeBgColor(humanChoiceBox, computerChoiceBox, 'human', true);
+      changeBgColor(humanScoreBoard[gameRounds-1], computerScoreBoard[gameRounds-1], 'human', false);
     } else if (humanSelected == computerSelected){
-      console.log('draw');
+      changeBgColor(humanChoiceBox, computerChoiceBox, 'draw', true);
+      changeBgColor(humanScoreBoard[gameRounds-1], computerScoreBoard[gameRounds-1], 'draw', false);
     } else {
       computerScore++;
+      changeBgColor(humanChoiceBox, computerChoiceBox, 'computer', true);
+      changeBgColor(humanScoreBoard[gameRounds-1], computerScoreBoard[gameRounds-1], 'computer', false);
     }
 
+    updateScoreBoard();
+
+    if(gameRounds == 5) {endGame()};
     console.log(`Human: ${humanScore} || Computer: ${computerScore}`);
 }
 
@@ -109,12 +138,32 @@ let rpsChoice;
 rpsOptions.forEach(el => el.addEventListener("click", optionClicked));
 
 function optionClicked(e) {
-  updateSelected(e.target);
-  humanSelected = e.target.src;
-  humanSelected = re.exec(humanSelected)[0];
-  loopArr();
+  if (gameRounds != 5) {
+    updateSelected(e.target);
+    humanSelected = e.target.src;
+    humanSelected = re.exec(humanSelected)[0];
+    loopArr();
+    disableOptions();  
+  }
+}
 
-  disableOptions();
+replayButton.addEventListener('click', ()=>{
+  clearScoreBoard();
+  finishedPopup.style.transform = "translateY(200px)";
+});
+
+function endGame() {
+    finishedPopup.style.transform = "translateY(-20px)";
+    disableOptions();
+    let pText = finishedPopup.childNodes[1];
+    if (humanScore > computerScore) {
+      pText.textContent = "Hoooman Wins!!!";
+    } else if (computerScore > humanScore) {
+      pText.textContent = "Hooman will try again";
+    } else {
+      pText.textContent = "Computer did not win!";
+    }
+    console.log('game finished');
 }
 
 function disableOptions() {
@@ -144,3 +193,47 @@ function updateSelected(element) {
   rpsChoice.appendChild(img);
 }
 
+
+function changeBgColor(humanSide, computerSide, winner, animateColor) {
+  if (winner === 'human') {
+    humanSide.style.backgroundColor = winColor;
+    computerSide.style.backgroundColor = loseColor;
+  } else if (winner === 'computer') {
+    computerSide.style.backgroundColor = winColor;
+    humanSide.style.backgroundColor = loseColor;   
+  } else if (winner === 'draw') {
+    humanSide.style.backgroundColor = computerSide.style.backgroundColor = drawColor;
+  }
+  
+  if (animateColor === true) {
+    setTimeout(() => {
+      humanSide.style.backgroundColor = computerSide.style.backgroundColor = normalColor;
+    }, 300); 
+  }
+}
+
+function updateScoreBoard() {
+
+  let scoreImage = document.createElement('img');
+  scoreImage.classList.add('score-img');
+
+  // human
+  scoreImage.src = `./images/${humanSelected}.png`;
+  humanScoreBoard[gameRounds-1].appendChild(scoreImage.cloneNode(true));
+  
+  // computer
+  scoreImage.src = `./images/${computerSelected}.png`;
+  computerScoreBoard[gameRounds-1].appendChild(scoreImage.cloneNode(true));
+}
+
+function clearScoreBoard() {
+  gameRounds = 0;
+  let scoreBoard = document.querySelectorAll('.score-board div');
+  document.querySelectorAll('.rps-choice').forEach((el) => el.removeChild(el.firstChild));
+  scoreBoard.forEach((el) => {
+    el.style.backgroundColor = normalColor;
+    if(el.firstChild) {
+      el.removeChild(el.firstChild);
+    };
+  });
+}
