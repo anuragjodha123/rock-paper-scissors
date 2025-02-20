@@ -1,3 +1,6 @@
+@import "https://unpkg.com/open-props";
+
+
 html {
   font-family: "Fira Code Retina";
   /* for the winning or losing effect*/
@@ -126,6 +129,7 @@ body {
 }
 
 .game-finished {
+  transform: translateY(200px);
   margin: 0 auto;
   padding: 30px 20px;
   border: none;
@@ -134,8 +138,12 @@ body {
   align-items: center;
   font-size: 1.5rem;
   gap: 20px;
-  transform: translateY(200px);
   transition: transform 500ms cubic-bezier(1, 0, 0.42, 1.1);
+  width: 400px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  bottom: 0;
 }
 
 .game-finished button {
@@ -147,6 +155,10 @@ body {
   transition: background-color 200ms linear;
 }
 
+.right .rps-options .option-img {
+  cursor: auto;
+}
+
 .game-finished button:hover {
   background-color: rgb(209, 207, 207);
 }
@@ -154,6 +166,49 @@ body {
 .game-finished button:active {
   transform: scale(0.9,0.9);
 }
+
 .game-finished p {
   margin: 0;
 }
+
+.bottom-div {
+  padding: 20px;
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bottom-div > button {
+  color: #f6f6f6;
+  cursor: pointer;
+}
+
+dialog {
+  overflow: hidden;
+  font-size: 1rem;
+  width: 300px;
+  margin-right: 10px;
+  margin-top: -170px;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 10px;
+  outline: 1px solid rgba(0, 0, 0, 0.15);  
+}
+
+dialog .top {
+  color: #8A7C9D;
+  display: flex;
+  font-size: 0.9rem;
+  justify-content: space-between;
+}
+
+dialog .top button {
+  color: #8A7C9D;
+  font-size: 1.3rem;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+

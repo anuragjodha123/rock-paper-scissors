@@ -3,8 +3,8 @@
 [X] Add score to the ui
 [X] Stop the game if 5 rounds completed
 [X] Announce Win (create element with replay button)
-[] Add confetti if human wins 😁
-[] Add the bottom dialog
+[X] Add confetti if human wins 😁
+[X] Add the bottom dialog
  */
  
 let humanScore = 0;
@@ -155,14 +155,19 @@ replayButton.addEventListener('click', ()=>{
 function endGame() {
     finishedPopup.style.transform = "translateY(-20px)";
     disableOptions();
+
     let pText = finishedPopup.childNodes[1];
     if (humanScore > computerScore) {
       pText.textContent = "Hoooman Wins!!!";
+      startConfetti();
     } else if (computerScore > humanScore) {
       pText.textContent = "Hooman will try again";
     } else {
       pText.textContent = "Computer did not win!";
     }
+    
+    humanScore = 0;
+    computerScore = 0; 
     console.log('game finished');
 }
 
@@ -229,11 +234,67 @@ function updateScoreBoard() {
 function clearScoreBoard() {
   gameRounds = 0;
   let scoreBoard = document.querySelectorAll('.score-board div');
-  document.querySelectorAll('.rps-choice').forEach((el) => el.removeChild(el.firstChild));
+  
+  document.querySelectorAll('.rps-choice').forEach((el) => {
+  if (el.firstChild) el.removeChild(el.firstChild) 
+  });
+  
   scoreBoard.forEach((el) => {
     el.style.backgroundColor = normalColor;
+    
     if(el.firstChild) {
       el.removeChild(el.firstChild);
     };
   });
 }
+
+// Confetti Script
+
+function startConfetti() {
+  const duration = 5 * 1000,
+    animationEnd = Date.now() + duration,
+    defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+  function randomInRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  const interval = setInterval(function () {
+    const timeLeft = animationEnd - Date.now();
+
+    if (timeLeft <= 0) {
+      return clearInterval(interval);
+    }
+
+    const particleCount = 50 * (timeLeft / duration);
+
+    // since particles fall down, start a bit higher than random
+    confetti(
+      Object.assign({}, defaults, {
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+      })
+    );
+    confetti(
+      Object.assign({}, defaults, {
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+      })
+    );
+  }, 250);
+}
+
+
+// dialog script
+
+let dialogBox = document.querySelector('dialog');
+let warningButton = document.querySelector('.bottom-div > button');
+let dialogCloseBtn = document.querySelector('dialog .top button');
+
+warningButton.addEventListener('click', () => {
+  dialogBox.show();
+})
+
+dialogCloseBtn.addEventListener('click', () => {
+  dialogBox.close();
+})
