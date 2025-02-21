@@ -2,7 +2,7 @@
 
 
 html {
-  font-family: "Fira Code Retina";
+  font-family: "Fira Code Retina", "Fira Code", serif;
   /* for the winning or losing effect*/
   transition: background-color 200ms linear;
 }
